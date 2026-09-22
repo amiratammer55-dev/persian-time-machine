@@ -1,28 +1,27 @@
 {
-  "name": "ماشین زمان فارسی - آلة الزمن الفارسية",
+  "id": "/persian-time-machine/",
+  "name": "ماشین زمان فارسی",
   "short_name": "ماشین زمان",
-  "description": "رحلة تعليمية تفاعلية في تاريخ اللغة الفارسية.",
+  "description": "رحلة تعليمية تفاعلية في تاريخ اللغة الفارسية",
   "lang": "ar",
   "dir": "rtl",
-  "id": "./",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/persian-time-machine/",
+  "scope": "/persian-time-machine/",
   "display": "standalone",
   "background_color": "#0a0d14",
   "theme_color": "#0a0d14",
-  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "/persian-time-machine/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "/persian-time-machine/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

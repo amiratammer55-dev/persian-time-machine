@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="/persian-time-machine/manifest.json">
 <meta name="theme-color" content="#0a0d14">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ماشین زمان فارسی">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="/persian-time-machine/icon-192.png">
 <title>ماشین زمان فارسی - V2</title>
 <style>
 :root{
@@ -243,33 +242,31 @@ footer{text-align:center;padding:24px;color:#77818e;border-top:1px solid var(--l
   .badge{display:inline-block;margin-top:10px}
   .screen{padding-top:38px}
 }
+</style>
 
-.install-app-btn{
+<style id="pwa-install-style">
+#installPWA{
   display:none;
   position:fixed;
-  left:18px;
-  bottom:18px;
-  z-index:80;
+  left:16px;
+  bottom:16px;
+  z-index:9999;
   border:0;
   border-radius:14px;
   padding:13px 18px;
+  font-family:Tahoma,Arial,sans-serif;
   font-weight:800;
   cursor:pointer;
-  color:#101318;
-  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  background:#6cd5d9;
+  color:#071019;
   box-shadow:0 12px 35px rgba(0,0,0,.35);
 }
-.install-app-btn.show{display:block}
+#installPWA.show{display:block}
 @media(max-width:620px){
-  .install-app-btn{
-    left:12px;
-    right:12px;
-    bottom:12px;
-    width:calc(100% - 24px);
-  }
+  #installPWA{left:12px;right:12px;width:calc(100% - 24px)}
 }
-
 </style>
+
 </head>
 <body>
 
@@ -277,7 +274,7 @@ footer{text-align:center;padding:24px;color:#77818e;border-top:1px solid var(--l
   <div class="brand">
     <div class="logo">⌛</div>
     <div>
-      <h1>ماشین عمان فارسی</h1>
+      <h1>ماشین زمان فارسی</h1>
       <small>آلة الزمن الفارسية</small>
     </div>
   </div>
@@ -477,11 +474,6 @@ footer{text-align:center;padding:24px;color:#77818e;border-top:1px solid var(--l
 
 </main>
 
-
-<button id="installAppBtn" class="install-app-btn" type="button">
-  تثبيت التطبيق 📱
-</button>
-
 <footer>ماشین زمان فارسی — Graduation Project V2</footer>
 
 <div id="about" class="modal" onclick="backdrop(event,'about')">
@@ -603,42 +595,47 @@ function unlockMiddle(){
 }
 
 setProgress(0);
+</script>
 
-// ===== PWA INSTALLATION =====
-let deferredInstallPrompt = null;
-const installAppBtn = document.getElementById('installAppBtn');
 
-window.addEventListener('beforeinstallprompt', (event) => {
-  event.preventDefault();
-  deferredInstallPrompt = event;
-  if (installAppBtn) installAppBtn.classList.add('show');
+<button id="installPWA" type="button">تثبيت التطبيق 📱</button>
+<script id="pwa-install-script">
+let deferredPWAInstall = null;
+const installPWA = document.getElementById('installPWA');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPWAInstall = e;
+  installPWA.classList.add('show');
 });
 
-if (installAppBtn) {
-  installAppBtn.addEventListener('click', async () => {
-    if (!deferredInstallPrompt) {
-      alert('إذا لم يظهر مربع التثبيت، افتحي قائمة Chrome واختاري "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".');
-      return;
-    }
-    deferredInstallPrompt.prompt();
-    await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    installAppBtn.classList.remove('show');
-  });
-}
+installPWA.addEventListener('click', async () => {
+  if (!deferredPWAInstall) {
+    alert('لو زر التثبيت لم يظهر تلقائيًا، افتحي قائمة Chrome واختاري "تثبيت التطبيق".');
+    return;
+  }
+  deferredPWAInstall.prompt();
+  await deferredPWAInstall.userChoice;
+  deferredPWAInstall = null;
+  installPWA.classList.remove('show');
+});
 
 window.addEventListener('appinstalled', () => {
-  deferredInstallPrompt = null;
-  if (installAppBtn) installAppBtn.classList.remove('show');
+  deferredPWAInstall = null;
+  installPWA.classList.remove('show');
 });
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .catch((error) => console.log('Service worker registration failed:', error));
+  window.addEventListener('load', async () => {
+    try {
+      await navigator.serviceWorker.register('/persian-time-machine/service-worker.js', {
+        scope: '/persian-time-machine/'
+      });
+    } catch (err) {
+      console.log('Service worker registration failed:', err);
+    }
   });
 }
-
 </script>
 
 </body>
